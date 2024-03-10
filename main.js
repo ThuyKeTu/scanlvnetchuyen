@@ -64,7 +64,7 @@ async function writelv6(a,b,c,d,e) {
         a = "0"+a
       }
   
-      if(a<10){
+      if(b<10){
         b = "000000"+b
       }else if(b<100){
         b = "00000"+b
@@ -93,6 +93,7 @@ var count5 = 1;
 var count6 = 1;
 var startid = 1
 var endid = 1574287;
+var list_user = []
 
 async function buff(index){
     return new Promise(resolve => {
@@ -121,7 +122,7 @@ async function buff(index){
 
 async function main(){
 
-    for(i=startid;i<=endid;i++){
+    for(i=0;i<list_user.length;i++){
       if(i%222 ==0){
         let newcount = `${i}||${count5}||${count6}`
         fs.writeFile("./data/status.txt", newcount, function(err) {
@@ -135,7 +136,7 @@ async function main(){
         if(idbanner.includes(i.toString())){
           console.log("co")
         }else{
-          await buff(i)
+          await buff(list_user[i])
           console.log(i+"||"+count5+"||"+count6)
         }
     }
@@ -144,26 +145,36 @@ async function main(){
 var idbanner = []
 
 function getidbaner(){
-  fss.readFile('./data/status.txt', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }else{
-      startid = data.split('||')[0]
-      count5 = data.split('||')[1]
-      count6 = data.split('||')[2]
-      console.log(startid,count5,count6)
-    }
-  });
+  // fss.readFile('./data/status.txt', 'utf8', (err, data) => {
+  //   if (err) {
+  //     console.error(err);
+  //     return;
+  //   }else{
+  //     startid = data.split('||')[0]
+  //     count5 = data.split('||')[1]
+  //     count6 = data.split('||')[2]
+  //     console.log(startid,count5,count6)
+  //   }
+  // });
   
 
-  fss.readFile('./data/banid.txt', 'utf8', (err, data) => {
+  // fss.readFile('./data/banid.txt', 'utf8', (err, data) => {
+  //   if (err) {
+  //     console.error(err);
+  //     return;
+  //   }else{
+  //     idbanner =data.split('\n')
+  //     setTimeout(main,3000)
+  //   }
+  // });
+
+  fss.readFile('./data/arr6.txt', 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
     }else{
-      idbanner =data.split('\n')
-      setTimeout(main,3000)
+      list_user = (JSON.parse(data))
+      main(list_user)
     }
   });
 }
